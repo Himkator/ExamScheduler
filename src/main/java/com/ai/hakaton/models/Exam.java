@@ -1,10 +1,13 @@
 package com.ai.hakaton.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "exams")
@@ -16,8 +19,7 @@ public class Exam {
 
     private String subject;
     private String instructor;
-    private String course;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "section_id")
     private Section section;
     private LocalDate examDate;
@@ -28,19 +30,30 @@ public class Exam {
     @JoinColumn(name = "auditorium_id")
     private Auditorium auditorium;
 
+    @ManyToMany(mappedBy = "exams", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
+    private Set<Student> students = new HashSet<>();
+
     public Exam() {
     }
 
-    public Exam(Long id, String subject, String instructor, String course, Section section, LocalDate examDate, LocalTime examTime, int duration, Auditorium auditorium) {
+    public Exam(Long id, String subject, String instructor, Section section, LocalDate examDate, LocalTime examTime, int duration, Auditorium auditorium) {
         this.id = id;
         this.subject = subject;
         this.instructor = instructor;
-        this.course = course;
         this.section = section;
         this.examDate = examDate;
         this.examTime = examTime;
         this.duration = duration;
         this.auditorium = auditorium;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     public Long getId() {
@@ -67,13 +80,6 @@ public class Exam {
         this.instructor = instructor;
     }
 
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
 
     public Section getSection() {
         return section;

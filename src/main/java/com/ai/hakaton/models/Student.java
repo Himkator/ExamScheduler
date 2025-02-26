@@ -1,5 +1,6 @@
 package com.ai.hakaton.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,8 +17,9 @@ public class Student {
     private String name;
     private String eduProgram;
     private String yearOfStudy;
+    private int course;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "student_section",
             joinColumns = @JoinColumn(name = "student_id"),
@@ -25,12 +27,39 @@ public class Student {
     )
     private Set<Section> sections = new HashSet<>();
 
-    public Student(String id, String name, String eduProgram, String yearOfStudy, Set<Section> sections) {
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "student_exam",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "exam_id")
+    )
+    @JsonIgnore
+    private Set<Exam> exams = new HashSet<>();
+
+    public Student(String id, String name, String eduProgram, String yearOfStudy, int course, Set<Section> sections, Set<Exam> exams) {
         this.id = id;
         this.name = name;
         this.eduProgram = eduProgram;
         this.yearOfStudy = yearOfStudy;
+        this.course = course;
         this.sections = sections;
+        this.exams = exams;
+    }
+
+    public int getCourse() {
+        return course;
+    }
+
+    public void setCourse(int course) {
+        this.course = course;
+    }
+
+    public Set<Exam> getExams() {
+        return exams;
+    }
+
+    public void setExams(Set<Exam> exams) {
+        this.exams = exams;
     }
 
     public Student() {

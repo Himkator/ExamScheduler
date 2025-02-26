@@ -71,6 +71,13 @@
             <artifactId>ortools-java</artifactId>
             <version>9.12.4544</version>
         </dependency>
+
+        <!-- Telegram Bots -->
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>6.7.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -22,13 +23,26 @@ public class Section {
     // Другие поля, например, курс, образовательная программа и т.п.
 
     // Связь многие ко многим со студентами (опционально, если нужна двунаправленная связь)
-    @ManyToMany(mappedBy = "sections", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "sections", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
     public Section(Long id, String code, Set<Student> students) {
         this.id = id;
         this.code = code;
         this.students = students;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return Objects.equals(id, section.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public Section() {

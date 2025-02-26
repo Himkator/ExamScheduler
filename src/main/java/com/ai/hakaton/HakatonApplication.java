@@ -23,22 +23,13 @@ public class HakatonApplication {
 //        DataLoadService service = context.getBean(DataLoadService.class);
 //        try {
 //            // Укажите корректные пути к файлам
-//            service.loadAuditoriums("C:\\Users\\himka\\IdeaProjects\\Practice1\\src\\main\\java\\com\\ai\\auditoriums.xlsx");
-//            service.loadExamsAndStudents("C:\\Users\\himka\\IdeaProjects\\Practice1\\src\\main\\java\\com\\ai\\FakedNarxozData.xlsx");
+//            System.out.println(service.loadAuditoriums("C:\\Users\\himka\\IdeaProjects\\Practice1\\src\\main\\java\\com\\ai\\auditoriums.xlsx"));
+//            System.out.println(service.loadExamsAndStudents("C:\\Users\\himka\\IdeaProjects\\Practice1\\src\\main\\java\\com\\ai\\FakedNarxozData.xlsx"));
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
         ExamSchedulerService service=context.getBean(ExamSchedulerService.class);
         Map<LocalDate, List<Exam>> a=service.scheduleExams();
-        for(LocalDate l:a.keySet()){
-            System.out.println("-------");
-            System.out.println(l+": ");
-            for (Exam e:a.get(l)){
-                System.out.println("-"+e.getSubject()+" "+e.getSection().getCode()+" "+e.getInstructor()
-                +" "+e.getExamDate()+" "+e.getExamTime()+" "+e.getAuditorium().getNumber());
-                System.out.println(e.getSection().getStudents().size()+": "+e.getAuditorium().getCapacity());
-            }
-            System.out.println("-------");
-        }
+        service.exportScheduleToExcel(a);
     }
 }
